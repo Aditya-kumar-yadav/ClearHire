@@ -1,0 +1,7 @@
+pandas
+numpy
+PyPDF2
+sentence-transformers
+qdrant-client
+jupyter
+python-dotenv
