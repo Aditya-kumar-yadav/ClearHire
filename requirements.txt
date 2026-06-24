@@ -1,6 +1,7 @@
-# ============================================================
+
+
 # requirements.txt — Full Stack Candidate Ranking Platform
-# ============================================================
+
 
 # FastAPI: Modern async Python web framework for the backend API
 fastapi==0.111.0
@@ -35,3 +36,11 @@ pandas==2.2.2
 
 # Python-dotenv: Load environment variables from .env file
 python-dotenv==1.0.1
+
+pandas
+numpy
+PyPDF2
+sentence-transformers
+qdrant-client
+jupyter
+python-dotenv

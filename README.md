@@ -1,3 +1,4 @@
+
 # RecruitIQ 🧠 
 
 > An AI-powered Candidate Ranking Platform built for modern enterprise HR teams.
@@ -46,3 +47,11 @@ python main.py
 * **Generative Verdicts:** Uses Gemini LLM to give personalized Hire/Reject recommendations.
 * **AI Interview Guide:** Generates 3 hyper-targeted technical questions for any candidate based on their specific weak points.
 * **Bias Detection:** Flags potentially biased language in Job Descriptions to ensure equitable hiring.
+# AI Candidate Matcher
+
+## Setup
+1. `pip install -r requirements.txt`
+2. Place resumes in `data/raw_resumes/`
+3. Place JD in `data/job_descriptions/`
+4. Run `python main.py`
+
