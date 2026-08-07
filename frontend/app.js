@@ -92,8 +92,12 @@ function initTheme() {
 function applyTheme(theme) {
   state.theme = theme;
   document.documentElement.setAttribute('data-theme', theme);
-  $('#themeIcon').textContent = theme === 'dark' ? '🌙' : '☀️';
-  $('#footerMode').textContent = theme === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode';
+  const themeIcon = $('#themeIcon');
+  if (themeIcon) {
+    themeIcon.innerHTML = theme === 'dark' ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
+    if (window.lucide) window.lucide.createIcons();
+  }
+  $('#footerMode').textContent = theme === 'dark' ? 'Dark Mode' : 'Light Mode';
   localStorage.setItem('recruitiq-theme', theme);
 
   // Re-render radar charts with new theme colours
@@ -1669,47 +1673,111 @@ window.generateInterviewQuestions = async function (idx) {
   const modal = $('#interviewModal');
   const container = $('#interviewQuestionsContainer');
   
-  // Show Modal and Loading Spinner
-  modal.style.display = 'flex'; // Use flex for better centering
-  container.innerHTML = `
-    <div style="text-align:center; padding:4rem 2rem; display:flex; flex-direction:column; align-items:center;">
-      <div class="spinner" style="width:40px; height:40px; border-width:3px; border-color:var(--accent-teal) transparent var(--accent-teal) transparent;"></div>
-      <p style="margin-top:1.5rem; color:var(--text-primary); font-size:1.1rem; font-weight:500;">Generating Professional Interview Guide...</p>
-      <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0.5rem;">Analyzing missing skills and required expertise</p>
-    </div>
-  `;
-
   try {
+    const candidate = state.lastResults.results[idx];
+    if (!candidate) return;
+
+    const modal = $('#interviewModal');
+    const container = $('#interviewQuestionsContainer');
+    
+    modal.style.display = 'flex';
+    container.innerHTML = `<div style="text-align:center; padding:4rem 2rem; display:flex; flex-direction:column; align-items:center;"><div class="spinner" style="width:40px; height:40px; border-width:3px; border-color:var(--accent-teal) transparent var(--accent-teal) transparent;"></div><p style="margin-top:1.5rem; color:var(--text-primary); font-size:1.1rem; font-weight:500;">Generating Professional Interview Guide...</p></div>`;
+
+    const jdText = $('#jdText').value.trim();
+    const apiKey = $('#geminiApiKey') ? $('#geminiApiKey').value.trim() : '';
+
     const res = await fetch(`${API_BASE}/api/interview-questions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        candidate: candidate,
-        jd_text: jdText,
-        gemini_api_key: apiKey
-      }),
+      body: JSON.stringify({ candidate, jd_text: jdText, gemini_api_key: apiKey }),
     });
 
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    // Global TTS function using backend gTTS with UI animation
+    if (!window.playTTS) {
+      window.currentAudio = null;
+      window.currentPlayingBtn = null;
+
+      window.playTTS = async function(btnElement, text) {
+        // Helper to safely swap icons
+        const setIcon = (btn, iconName) => {
+          btn.innerHTML = `<i data-lucide="${iconName}" style="width:18px;height:18px;"></i>`;
+          lucide.createIcons();
+        };
+
+        // If clicking the currently playing button
+        if (window.currentAudio && window.currentPlayingBtn === btnElement) {
+          if (!window.currentAudio.paused) {
+            window.currentAudio.pause();
+            setIcon(btnElement, 'play');
+            btnElement.style.animation = 'none';
+          } else {
+            window.currentAudio.play();
+            setIcon(btnElement, 'pause');
+            btnElement.style.animation = 'pulse 1.5s infinite';
+          }
+          return;
+        }
+
+        // If something else was playing, reset it
+        if (window.currentAudio) {
+          window.currentAudio.pause();
+          if (window.currentPlayingBtn) {
+            setIcon(window.currentPlayingBtn, 'volume-2');
+            window.currentPlayingBtn.style.animation = 'none';
+          }
+        }
+
+        try {
+          setIcon(btnElement, 'loader-2');
+
+          const res = await fetch(`${API_BASE}/api/tts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+          });
+          if (!res.ok) throw new Error('TTS failed');
+          const blob = await res.blob();
+          window.currentAudio = new Audio(URL.createObjectURL(blob));
+          window.currentPlayingBtn = btnElement;
+
+          window.currentAudio.onended = () => {
+            setIcon(btnElement, 'volume-2');
+            btnElement.style.animation = 'none';
+            window.currentPlayingBtn = null;
+          };
+
+          setIcon(btnElement, 'pause');
+          btnElement.style.animation = 'pulse 1.5s infinite';
+          window.currentAudio.play();
+        } catch (e) {
+          console.error(e);
+          setIcon(btnElement, 'volume-2');
+        }
+      };
     }
 
     const data = await res.json();
-    
     let html = '';
     
     if (data.questions && data.questions.length > 0) {
       data.questions.forEach((q, i) => {
         html += `
           <div style="background:var(--bg-panel); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; color:var(--accent-teal); font-weight:700;">
-              <div style="background:var(--accent-teal); color:#000; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">${i+1}</div>
-              ${escHtml(q.type)}
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+              <div style="display:flex; align-items:center; gap:0.5rem; color:var(--accent-teal); font-weight:700;">
+                <div style="background:var(--accent-teal); color:#000; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">${i+1}</div>
+                ${escHtml(q.type)}
+              </div>
+              <button class="tts-btn" data-text="${escHtml(q.question)}" onclick="playTTS(this, this.getAttribute('data-text'))" style="background:var(--bg-hover); border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-primary); transition:all 0.2s;" title="Read aloud" onmouseover="this.style.background='var(--accent-teal)'; this.style.color='#000'" onmouseout="this.style.background='var(--bg-hover)'; this.style.color='var(--text-primary)'">
+                <i data-lucide="volume-2" style="width:18px;height:18px;"></i>
+              </button>
             </div>
             <p style="font-size:1.1rem; color:var(--text-primary); margin-bottom:1rem; font-weight:500;">
               "${escHtml(q.question)}"
             </p>
-            <div style="background:rgba(124, 111, 247, 0.1); border-left:4px solid var(--accent-purple); padding:1rem; border-radius:4px; font-size:0.9rem;">
+            <div style="background:color-mix(in srgb, var(--accent-purple) 10%, transparent); border-left:4px solid var(--accent-purple); padding:1rem; border-radius:4px; font-size:0.9rem;">
               <strong>Rationale:</strong> ${escHtml(q.rationale)}
             </div>
           </div>
@@ -1718,8 +1786,8 @@ window.generateInterviewQuestions = async function (idx) {
     } else {
       html = `<p>No questions generated.</p>`;
     }
-    
     container.innerHTML = html;
+    lucide.createIcons();
 
   } catch (err) {
     container.innerHTML = `

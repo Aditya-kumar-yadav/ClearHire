@@ -379,6 +379,24 @@ async def get_verdict(request: VerdictRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+from fastapi.responses import StreamingResponse
+import io
+
+class TTSRequest(BaseModel):
+    text: str
+
+@app.post("/api/tts")
+async def generate_tts(request: TTSRequest):
+    try:
+        from gtts import gTTS
+        tts = gTTS(text=request.text, lang='en', tld='com')
+        fp = io.BytesIO()
+        tts.write_to_fp(fp)
+        fp.seek(0)
+        return StreamingResponse(fp, media_type="audio/mpeg")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/interview-questions")
 async def get_interview_questions(request: InterviewQuestionsRequest):
     """Generates personalized LLM interview questions for a candidate."""
