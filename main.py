@@ -471,6 +471,29 @@ async def export_csv():
         }
     )
 
+# ==========================================================
+# TTS ENDPOINT (gTTS)
+# ==========================================================
+from io import BytesIO
+from fastapi import Response
+
+class TTSRequest(BaseModel):
+    text: str
+
+@app.post("/api/tts")
+async def text_to_speech(req: TTSRequest):
+    """Generates an MP3 audio blob from text using Google TTS."""
+    try:
+        from gtts import gTTS
+        tts = gTTS(text=req.text, lang='en')
+        fp = BytesIO()
+        tts.write_to_fp(fp)
+        fp.seek(0)
+        return Response(content=fp.read(), media_type="audio/mpeg")
+    except Exception as e:
+        logger.error(f"TTS Error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate audio")
+
 # SERVE FRONTEND (STATIC FILES)
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
