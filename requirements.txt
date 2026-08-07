@@ -12,9 +12,7 @@ uvicorn==0.29.0
 python-multipart==0.0.9
 
 
-# Sentence-Transformers: Neural embedding model for semantic matching
-sentence-transformers==2.7.0
-
+# Sentence-Transformers: (Removed to prevent OOM 137 on Render Free Tier)
 # Scikit-learn: TF-IDF fallback + cosine similarity
 scikit-learn==1.4.2
 

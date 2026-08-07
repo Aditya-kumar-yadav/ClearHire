@@ -8,9 +8,14 @@ import logging
 import numpy as np
 from functools import lru_cache
 from typing import Optional
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+try:
+    from sentence_transformers import SentenceTransformer
+    _HAS_SENTENCE_TRANSFORMERS = True
+except ImportError:
+    _HAS_SENTENCE_TRANSFORMERS = False
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,6 +45,11 @@ _embedding_model = None
 
 def _load_model():
     global _embedding_model
+    if not _HAS_SENTENCE_TRANSFORMERS:
+        logger.info("Layer 1: sentence_transformers not installed. Skipping Neural model.")
+        _embedding_model = None
+        return
+        
     try:
         logger.info("Layer 1: Loading 'BAAI/bge-small-en-v1.5' embedding model...")
         _embedding_model = SentenceTransformer("BAAI/bge-small-en-v1.5")
