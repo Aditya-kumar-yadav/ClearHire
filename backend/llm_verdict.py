@@ -2,14 +2,14 @@
 # backend/llm_verdict.py — LLM Candidate Verdict Engine
 # ============================================================
 # PURPOSE:
-#   Uses the Anthropic Claude API to generate a professional,
+#   Uses the Google Gemini API to generate a professional,
 #   human-readable hiring recommendation for each candidate
 #   based on their layer scores and profile data.
 #
 # SETUP:
-#   1. Get your Anthropic API key from https://console.anthropic.com
+#   1. Get your Google Gemini API key from https://aistudio.google.com
 #   2. Create a .env file in the project root with:
-#      ANTHROPIC_API_KEY=your-key-here
+#      GEMINI_API_KEY=your-key-here
 #   3. The system will automatically load it via python-dotenv
 #
 # FALLBACK:
@@ -20,10 +20,7 @@
 
 import os
 import logging
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -32,10 +29,10 @@ logger = logging.getLogger(__name__)
 _gemini_available = False
 
 try:
-    import google.generativeai as genai
+    from google import genai
     api_key = os.getenv("GEMINI_API_KEY", "")
     if api_key:
-        genai.configure(api_key=api_key)
+        _client = genai.Client(api_key=api_key)
         _gemini_available = True
         logger.info("LLM Verdict: Gemini client initialized successfully. ✓")
     else:
@@ -44,10 +41,10 @@ try:
             "Will use rule-based fallback verdicts."
         )
 except ImportError:
-    logger.warning("LLM Verdict: google-generativeai package not installed. Using fallback.")
+    logger.warning("LLM Verdict: google-genai package not installed. Using fallback.")
 
 
-def generate_verdict(
+async def generate_verdict(
     candidate_name     : str,
     scores             : dict,
     jd_text            : str,
@@ -56,7 +53,7 @@ def generate_verdict(
     api_key            : str = ""
 ) -> dict:
     """
-    Generates a professional hiring verdict for a candidate.
+    Generates a professional hiring verdict for a candidate asynchronously.
 
     Args:
         candidate_name      (str):  Candidate's full name
@@ -76,11 +73,11 @@ def generate_verdict(
     # BUILD SCORES SUMMARY FOR PROMPT
     # ----------------------------------------------------------
     scores_summary = (
-        f"Semantic Match: {scores.get('l1', 0):.1f}%, "
-        f"Skill Taxonomy: {scores.get('l2', 0):.1f}%, "
-        f"Experience: {scores.get('l3', 0):.1f}%, "
-        f"Project Relevance: {scores.get('l4', 0):.1f}%, "
-        f"GitHub Activity: {scores.get('l5', 0):.1f}%, "
+        f"Semantic Match: {scores.get('score_l1', 0):.1f}%, "
+        f"Skill Taxonomy: {scores.get('score_l2', 0):.1f}%, "
+        f"Experience: {scores.get('score_l3', 0):.1f}%, "
+        f"Project Relevance: {scores.get('score_l4', 0):.1f}%, "
+        f"GitHub Activity: {scores.get('score_l5', 0):.1f}%, "
         f"Composite: {scores.get('composite', 0):.1f}%"
     )
 
@@ -89,40 +86,50 @@ def generate_verdict(
     # ----------------------------------------------------------
     # ATTEMPT LLM VERDICT
     # ----------------------------------------------------------
-    use_gemini = _gemini_available
-    if api_key and _gemini_available:
-        try:
-            genai.configure(api_key=api_key)
+    use_gemini = False
+    client = None
+    try:
+        from google import genai
+        final_key = api_key if api_key else os.getenv("GEMINI_API_KEY", "")
+        if final_key:
+            client = genai.Client(api_key=final_key)
             use_gemini = True
-            logger.info("LLM Verdict: Using provided dynamic API Key.")
-        except Exception as e:
-            logger.warning(f"LLM Verdict: Failed to configure dynamic key: {e}")
-
+            if api_key:
+                logger.info("LLM Verdict: Using provided dynamic API Key.")
+    except ImportError:
+        logger.warning("LLM Verdict: Failed to import google-genai.")
+    except Exception as e:
+        logger.warning(f"LLM Verdict: Failed to configure dynamic key: {e}")
+            
     if use_gemini:
         try:
             prompt = f"""You are a senior technical recruiter with 15 years of experience 
-at a top-tier technology company. Analyze this candidate evaluation and provide a concise verdict.
+            at a top-tier technology company. Analyze this candidate evaluation and provide a concise verdict.
+            
+            JOB DESCRIPTION:
+            {jd_text}
+            
+            CANDIDATE: {candidate_name}
+            SKILLS: {skills_str}
+            EXPERIENCE: {years_of_experience} years
+            AI SCORING BREAKDOWN: {scores_summary}
+            
+            Provide:
+            1. A 2-3 sentence professional hiring recommendation that references specific scores and skills.
+            2. A final recommendation label — exactly one of: "Strong Hire", "Consider", or "Pass"
+            
+            Format your response exactly like this (do not use bolding or markdown for the labels):
+            VERDICT: [your 2-3 sentence analysis]
+            RECOMMENDATION: [Strong Hire | Consider | Pass]
+            
+            Be specific, professional, and constructive. Reference actual numbers from the scoring."""
 
-JOB DESCRIPTION:
-{jd_text}
+    
+            response = await client.aio.models.generate_content(
+              model="gemini-2.5-flash",
+              contents=prompt
+            )
 
-CANDIDATE: {candidate_name}
-SKILLS: {skills_str}
-EXPERIENCE: {years_of_experience} years
-AI SCORING BREAKDOWN: {scores_summary}
-
-Provide:
-1. A 2-3 sentence professional hiring recommendation that references specific scores and skills.
-2. A final recommendation label — exactly one of: "Strong Hire", "Consider", or "Pass"
-
-Format your response exactly like this (do not use bolding or markdown for the labels):
-VERDICT: [your 2-3 sentence analysis]
-RECOMMENDATION: [Strong Hire | Consider | Pass]
-
-Be specific, professional, and constructive. Reference actual numbers from the scoring."""
-
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            response = model.generate_content(prompt)
             response_text = response.text.strip()
 
             # Parse the structured response
@@ -150,6 +157,9 @@ Be specific, professional, and constructive. Reference actual numbers from the s
         except Exception as e:
             logger.warning(f"LLM Verdict: API call failed — {e}. Using rule-based fallback.")
 
+
+   
+
     # ----------------------------------------------------------
     # RULE-BASED FALLBACK VERDICT
     # ----------------------------------------------------------
@@ -157,9 +167,9 @@ Be specific, professional, and constructive. Reference actual numbers from the s
     # Runs when API key is missing or API call fails.
     # ----------------------------------------------------------
     composite = scores.get("composite", 0)
-    s1        = scores.get("l1", 0)
-    s2        = scores.get("l2", 0)
-    s3        = scores.get("l3", 0)
+    s1        = scores.get("score_l1", 0)
+    s2        = scores.get("score_l2", 0)
+    s3        = scores.get("score_l3", 0)
 
     if composite >= 75:
         recommendation = "Strong Hire"

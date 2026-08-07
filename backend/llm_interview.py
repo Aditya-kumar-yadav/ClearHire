@@ -1,10 +1,6 @@
 import os
 import logging
 import json
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,10 +9,10 @@ logger = logging.getLogger(__name__)
 _gemini_available = False
 
 try:
-    import google.generativeai as genai
+    from google import genai
     api_key = os.getenv("GEMINI_API_KEY", "")
     if api_key:
-        genai.configure(api_key=api_key)
+        _client = genai.Client(api_key=api_key)
         _gemini_available = True
         logger.info("LLM Interview: Gemini client initialized successfully. ✓")
     else:
@@ -25,10 +21,10 @@ try:
             "Will use fallback generic questions."
         )
 except ImportError:
-    logger.warning("LLM Interview: google-generativeai package not installed. Using fallback.")
+    logger.warning("LLM Interview: google-genai package not installed. Using fallback.")
 
 
-def generate_interview_questions(
+async def generate_interview_questions(
     candidate_name: str,
     matched_skills: list,
     missing_skills: list,
@@ -45,14 +41,20 @@ def generate_interview_questions(
     # ----------------------------------------------------------
     # ATTEMPT LLM GENERATION
     # ----------------------------------------------------------
-    use_gemini = _gemini_available
-    if api_key and _gemini_available:
-        try:
-            genai.configure(api_key=api_key)
+    use_gemini = False
+    client = None
+    try:
+        from google import genai
+        final_key = api_key if api_key else os.getenv("GEMINI_API_KEY", "")
+        if final_key:
+            client = genai.Client(api_key=final_key)
             use_gemini = True
-            logger.info("LLM Interview: Using provided dynamic API Key.")
-        except Exception as e:
-            logger.warning(f"LLM Interview: Failed to configure dynamic key: {e}")
+            if api_key:
+                logger.info("LLM Interview: Using provided dynamic API Key.")
+    except ImportError:
+        logger.warning("LLM Interview: Failed to import google-genai.")
+    except Exception as e:
+        logger.warning(f"LLM Interview: Failed to configure dynamic key: {e}")
 
     if use_gemini:
         try:
@@ -83,8 +85,10 @@ Return valid JSON matching this exact structure:
 }}
 Do NOT wrap the JSON in markdown code blocks. Just output raw JSON.
 """
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            response = model.generate_content(prompt)
+            response = await client.aio.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt
+            )
             response_text = response.text.strip()
             
             # Clean up markdown if the LLM adds it anyway
