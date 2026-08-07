@@ -19,11 +19,11 @@
 .candidate-card:hover,
 .ranking-card:hover {
   transform: translateY(-4px) !important;
-  border-color: rgba(124, 111, 247, 0.6) !important;
+  border-color: color-mix(in srgb, var(--accent-purple) 60%, transparent) !important;
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.3),
-    0 8px 16px rgba(124, 111, 247, 0.15),
-    inset 0 0 12px rgba(124, 111, 247, 0.05) !important;
+    0 8px 16px color-mix(in srgb, var(--accent-purple) 15%, transparent),
+    inset 0 0 12px color-mix(in srgb, var(--accent-purple) 5%, transparent) !important;
 }
 
 /* 3. Glare Hover Effect (Adapted for Vanilla CSS) */
@@ -73,7 +73,7 @@
 .btn-ai-aesthetic {
   position: relative;
   background: transparent !important;
-  color: #fff !important;
+  color: var(--text-primary) !important;
   border: none !important;
   padding: 0.4rem 0.8rem !important;
   font-size: 0.75rem !important;
@@ -96,16 +96,16 @@
   background: conic-gradient(from var(--glow-angle), 
     transparent 0%, 
     transparent 20%, 
-    #ff3366, 
-    #ffcc00, 
-    #00ffcc, 
-    #006aff, 
+    var(--accent-pink), 
+    var(--accent-orange), 
+    var(--accent-teal), 
+    var(--accent-blue), 
     transparent 80%, 
     transparent 100%
   );
   z-index: -2;
   animation: rotate-glow 2.5s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.3));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent-teal) 30%, transparent));
 }
 
 .btn-ai-aesthetic::after {
@@ -113,7 +113,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 12px;
-  background: #15151a; /* Dark solid inner */
+  background: var(--bg-base); /* Dark solid inner */
   z-index: -1;
   box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
 }
@@ -128,8 +128,8 @@
   right: -8px;
   width: 16px;
   height: 16px;
-  color: #ffcc00;
-  background: #15151a;
+  color: var(--accent-orange);
+  background: var(--bg-base);
   padding: 2px;
   border-radius: 50%;
   transition: all 0.2s ease;
@@ -138,15 +138,15 @@
 
 .btn-ai-aesthetic:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-teal) 20%, transparent);
 }
 
 .btn-ai-aesthetic:hover::before {
-  filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.6));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-teal) 60%, transparent));
 }
 
 .btn-ai-aesthetic:hover .btn-sparkle {
-  color: #00ffcc;
+  color: var(--accent-teal);
   transform: scale(1.2) rotate(15deg);
 }
 
@@ -175,9 +175,9 @@
 .btn-info-aesthetic:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: var(--accent-blue);
-  color: #fff;
+  color: var(--text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-blue) 20%, transparent);
 }
 
 .btn-info-aesthetic:active {
@@ -190,7 +190,7 @@
 .btn-voice-ai {
   position: relative;
   background: transparent !important;
-  color: #fff !important;
+  color: var(--text-primary) !important;
   border: none !important;
   width: 48px;
   /* Fixed width for perfect circle */
@@ -217,16 +217,16 @@
   background: conic-gradient(from var(--glow-angle), 
     transparent 0%, 
     transparent 20%, 
-    #ff3366, 
-    #ffcc00, 
-    #00ffcc, 
-    #006aff, 
+    var(--accent-pink), 
+    var(--accent-orange), 
+    var(--accent-teal), 
+    var(--accent-blue), 
     transparent 80%, 
     transparent 100%
   );
   z-index: -2;
   animation: rotate-glow 2.5s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.3));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent-teal) 30%, transparent));
 }
 
 .btn-voice-ai::after {
@@ -234,7 +234,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  background: #15151a;
+  background: var(--bg-base);
   z-index: -1;
   box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
 }
@@ -245,11 +245,11 @@
 
 .btn-voice-ai:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-teal) 20%, transparent);
 }
 
 .btn-voice-ai:hover::before {
-  filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.6));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-teal) 60%, transparent));
 }
 
 .btn-voice-ai .mic-icon {
@@ -258,12 +258,12 @@
   height: 24px;
   stroke-width: 2;
   transition: all 0.2s ease;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* Speaking Animation */
 .btn-voice-ai.playing {
-  color: #fff !important;
+  color: var(--text-primary) !important;
   /* Continuous breathing ripple */
   animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
@@ -274,7 +274,7 @@
 
 .btn-voice-ai.playing::before {
   animation: rotate-glow 1s linear infinite;
-  filter: drop-shadow(0 0 12px rgba(124, 111, 247, 0.8));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent-purple) 80%, transparent));
 }
 
 .btn-voice-ai.playing .mic-icon {
@@ -284,15 +284,15 @@
 
 @keyframes pulse-ring {
   0% {
-    box-shadow: 0 0 0 0 rgba(124, 111, 247, 0.6);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-purple) 60%, transparent);
   }
 
   70% {
-    box-shadow: 0 0 0 15px rgba(124, 111, 247, 0);
+    box-shadow: 0 0 0 15px color-mix(in srgb, var(--accent-purple) 0%, transparent);
   }
 
   100% {
-    box-shadow: 0 0 0 0 rgba(124, 111, 247, 0);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-purple) 0%, transparent);
   }
 }
 
@@ -320,7 +320,7 @@
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  background: #0d0f18 !important;
+  background: var(--bg-base) !important;
   z-index: 1;
 }
 
@@ -331,7 +331,7 @@
   transform: translateX(-50%);
   width: 140vw;
   height: 80vh;
-  background: radial-gradient(ellipse at bottom, rgba(124, 111, 247, 0.4) 0%, rgba(30, 20, 60, 0) 70%);
+  background: radial-gradient(ellipse at bottom, color-mix(in srgb, var(--accent-purple) 40%, transparent) 0%, color-mix(in srgb, var(--bg-card) 0%, transparent) 70%);
   border-radius: 50%;
   filter: blur(80px);
   z-index: -1;
@@ -346,7 +346,7 @@
   right: 10%;
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  box-shadow: 0 0 20px rgba(124, 111, 247, 0.8), 0 0 40px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent-purple) 80%, transparent), 0 0 40px rgba(255, 255, 255, 0.5);
   border-radius: 50%;
 }
 
@@ -362,13 +362,13 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1rem;
-  color: #fff !important;
+  color: var(--text-primary) !important;
   letter-spacing: -0.02em;
 }
 
 .landing-subtitle {
   font-size: 1.15rem;
-  color: #8b92b8 !important;
+  color: var(--text-secondary) !important;
   margin-bottom: 2rem;
   line-height: 1.6;
   max-width: 650px;
@@ -383,9 +383,9 @@
 }
 
 .landing-launch-btn {
-  background: linear-gradient(135deg, #6b5ce7 0%, #8c7afb 100%);
+  background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-purple) 100%);
   border: none;
-  box-shadow: 0 8px 24px rgba(107, 92, 231, 0.4);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-purple) 40%, transparent);
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
   border-radius: 30px;
@@ -394,14 +394,14 @@
 
 .landing-launch-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(107, 92, 231, 0.6);
-  background: linear-gradient(135deg, #7c6ff7 0%, #9e8dfc 100%);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-purple) 60%, transparent);
+  background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-purple) 100%);
 }
 
 .landing-trust-banner {
   margin: 2rem 0;
   text-align: center;
-  color: #555d80 !important;
+  color: var(--text-secondary) !important;
   font-size: 0.9rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -419,7 +419,7 @@
 .landing-logos span {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff !important;
+  color: var(--text-primary) !important;
   font-family: 'Times New Roman', serif; /* Fake logo fonts */
 }
 
@@ -437,24 +437,24 @@
 .landing-features-badge {
   display: inline-block;
   padding: 0.4rem 1rem;
-  background: rgba(124, 111, 247, 0.15);
+  background: color-mix(in srgb, var(--accent-purple) 15%, transparent);
   color: var(--accent-purple);
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(124, 111, 247, 0.3);
+  border: 1px solid color-mix(in srgb, var(--accent-purple) 30%, transparent);
 }
 
 .landing-features-header h2 {
   font-size: 2.2rem;
   margin-bottom: 1rem;
   line-height: 1.2;
-  color: #fff !important;
+  color: var(--text-primary) !important;
 }
 
 .landing-features-header p {
-  color: #8b92b8 !important;
+  color: var(--text-secondary) !important;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -466,8 +466,8 @@
 }
 
 .landing-card {
-  background: rgba(20, 16, 40, 0.6);
-  border: 1px solid rgba(124, 111, 247, 0.2);
+  background: color-mix(in srgb, var(--bg-card) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-purple) 20%, transparent);
   border-radius: 16px;
   padding: 2rem;
   transition: all 0.3s ease;
@@ -486,8 +486,8 @@
 
 .landing-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(124, 111, 247, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(124, 111, 247, 0.1);
+  border-color: color-mix(in srgb, var(--accent-purple) 50%, transparent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px color-mix(in srgb, var(--accent-purple) 10%, transparent);
 }
 
 .card-icon-wrap {
@@ -498,27 +498,27 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  background: rgba(124, 111, 247, 0.15);
+  background: color-mix(in srgb, var(--accent-purple) 15%, transparent);
   color: var(--accent-purple);
-  box-shadow: 0 0 15px rgba(124, 111, 247, 0.3) inset;
+  box-shadow: 0 0 15px color-mix(in srgb, var(--accent-purple) 30%, transparent) inset;
 }
 
 .landing-card h3 {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
-  color: #fff !important;
+  color: var(--text-primary) !important;
 }
 
 .landing-card p {
   font-size: 0.95rem;
-  color: #8b92b8 !important;
+  color: var(--text-secondary) !important;
   line-height: 1.5;
 }
 
 .card-details {
   display: none;
   font-size: 0.9rem;
-  color: #a0a6cc;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -532,12 +532,12 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.card-l1 .card-icon-wrap { background: rgba(124, 111, 247, 0.15); color: #7c6ff7; box-shadow: 0 0 15px rgba(124, 111, 247, 0.3) inset;}
-.card-l2 .card-icon-wrap { background: rgba(0, 212, 170, 0.15); color: #00d4aa; box-shadow: 0 0 15px rgba(0, 212, 170, 0.3) inset;}
-.card-l3 .card-icon-wrap { background: rgba(247, 154, 30, 0.15); color: #f79a1e; box-shadow: 0 0 15px rgba(247, 154, 30, 0.3) inset;}
-.card-l4 .card-icon-wrap { background: rgba(233, 30, 140, 0.15); color: #e91e8c; box-shadow: 0 0 15px rgba(233, 30, 140, 0.3) inset;}
-.card-l5 .card-icon-wrap { background: rgba(59, 158, 255, 0.15); color: #3b9eff; box-shadow: 0 0 15px rgba(59, 158, 255, 0.3) inset;}
-.card-llm .card-icon-wrap { background: rgba(179, 71, 255, 0.15); color: #b347ff; box-shadow: 0 0 15px rgba(179, 71, 255, 0.3) inset;}
+.card-l1 .card-icon-wrap { background: color-mix(in srgb, var(--accent-purple) 15%, transparent); color: var(--accent-purple); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-purple) 30%, transparent) inset;}
+.card-l2 .card-icon-wrap { background: color-mix(in srgb, var(--accent-teal) 15%, transparent); color: var(--accent-teal); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-teal) 30%, transparent) inset;}
+.card-l3 .card-icon-wrap { background: color-mix(in srgb, var(--accent-orange) 15%, transparent); color: var(--accent-orange); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-orange) 30%, transparent) inset;}
+.card-l4 .card-icon-wrap { background: color-mix(in srgb, var(--accent-pink) 15%, transparent); color: var(--accent-pink); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-pink) 30%, transparent) inset;}
+.card-l5 .card-icon-wrap { background: color-mix(in srgb, var(--accent-blue) 15%, transparent); color: var(--accent-blue); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-blue) 30%, transparent) inset;}
+.card-llm .card-icon-wrap { background: color-mix(in srgb, var(--accent-purple) 15%, transparent); color: var(--accent-purple); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-purple) 30%, transparent) inset;}
 
 /* ============================================================
    LAYER DETAILS PAGE (DEEP DIVE)
@@ -584,7 +584,7 @@
 
 .details-subtitle {
   font-size: 1.25rem;
-  color: #8b92b8;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -624,7 +624,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: #7c6ff7;
+  color: var(--accent-purple);
   font-weight: bold;
 }
 
@@ -672,13 +672,13 @@
   content: '';
   position: absolute;
   top: 0; left: 0; width: 4px; height: 100%;
-  background: var(--stat-color, #7c6ff7);
-  box-shadow: 0 0 10px var(--stat-color, #7c6ff7);
+  background: var(--stat-color, var(--accent-purple));
+  box-shadow: 0 0 10px var(--stat-color, var(--accent-purple));
 }
 
 .stat-label {
   font-size: 0.85rem;
-  color: #8b92b8;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
@@ -734,7 +734,7 @@
 }
 
 .explain-list li .check-icon {
-  color: #00d4aa;
+  color: var(--accent-teal);
   flex-shrink: 0;
   margin-top: 0.1rem;
 }

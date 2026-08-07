@@ -6,8 +6,8 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>RecruitIQ — AI Candidate Ranking Platform</title>
-  <link href="styles.css?v=3" rel="stylesheet" />
-  <link href="hackathon-premium.css?v=17" rel="stylesheet" />
+  <link href="styles.css?v=20" rel="stylesheet" />
+  <link href="hackathon-premium.css?v=105" rel="stylesheet" />
   <!-- Chart.js for radar charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <!-- Lucide icons -->
@@ -41,7 +41,7 @@
         <span id="apiStatusText">Connecting...</span>
       </span>
       <button class="btn-icon" id="themeToggle" title="Toggle dark/light mode">
-        <span id="themeIcon">🌙</span>
+        <span id="themeIcon"><i data-lucide="moon"></i></span>
       </button>
     </div>
   </nav>
@@ -444,11 +444,11 @@
       <p>
         Powered by Gemini & Semantic AI Analytics
          | 
-        <span id="footerMode">🌙 Dark Mode</span>
+        <span id="footerMode">Dark Mode</span>
       </p>
     </footer>
     <!-- App Logic -->
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=20"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const launchBtn = document.getElementById('launchPlatformBtn');
