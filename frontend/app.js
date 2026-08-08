@@ -1,5 +1,5 @@
 /* ============================================================
-   app.js — RecruitIQ Frontend Application
+   app.js — ClearHire Frontend Application
    ============================================================
    Complete UI logic for:
    - Theme toggle (dark/light)
@@ -81,7 +81,7 @@ window.showLayerDetailsModal = function (htmlContent) {
 };
 
 function initTheme() {
-  const saved = localStorage.getItem('recruitiq-theme') || 'dark';
+  const saved = localStorage.getItem('clearhire-theme') || 'dark';
   applyTheme(saved);
 
   $('#themeToggle').addEventListener('click', () => {
@@ -98,7 +98,7 @@ function applyTheme(theme) {
     if (window.lucide) window.lucide.createIcons();
   }
   $('#footerMode').textContent = theme === 'dark' ? 'Dark Mode' : 'Light Mode';
-  localStorage.setItem('recruitiq-theme', theme);
+  localStorage.setItem('clearhire-theme', theme);
 
   // Re-render radar charts with new theme colours
   Object.values(state.radarCharts).forEach(chart => {
@@ -1655,7 +1655,7 @@ async function init() {
   // Load JD templates + candidates from API
   await loadJdTemplates();
 
-  console.log('✅ RecruitIQ initialized');
+  console.log('✅ ClearHire initialized');
 }
 
 // ============================================================

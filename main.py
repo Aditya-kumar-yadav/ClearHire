@@ -1,6 +1,6 @@
 """
 =============================================================================
- RESUME_LLM Core Server
+ ClearHire Core Server
 =============================================================================
  Main entry point for the FastAPI application. Orchestrates the 5-layer 
  hybrid scoring pipeline, handles PDF resume parsing, interfaces with 
@@ -517,7 +517,7 @@ else:
 if __name__ == "__main__":
     import uvicorn
     print("\n========================================================")
-    print("RecruitIQ Server is starting up...")
+    print("ClearHire Server is starting up...")
     print("Open your browser to: http://localhost:8000")
     print("========================================================\n")
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

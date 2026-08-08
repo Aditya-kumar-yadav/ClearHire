@@ -1,4 +1,4 @@
-# 🎯 RecruitIQ — AI-Powered Candidate Ranking Platform
+# 🎯 ClearHire — AI-Powered Candidate Ranking Platform
 
 > A production-grade, multi-layer hybrid scoring pipeline that ranks candidates by **meaning**, not keywords — combining neural semantic embeddings, skill taxonomy resolution, NLP-based experience extraction, live GitHub analysis, and Gemini LLM verdicts into a single transparent composite score.
 
@@ -8,7 +8,7 @@
 
 - [Overview](#overview)
 - [Demo Video](#demo-video)
-- [Why RecruitIQ](#why-recruitiq)
+- [Why ClearHire](#why-clearhire)
 - [Architecture](#architecture)
 - [The 5-Layer Pipeline](#the-5-layer-pipeline)
 - [Features](#features)
@@ -30,14 +30,14 @@
 
 ## Overview
 
-RecruitIQ is a full-stack AI candidate ranking platform built with **FastAPI** on the backend and **Vanilla HTML/CSS/JavaScript** on the frontend. It evaluates every resume through five independent scoring layers — semantic meaning, skill taxonomy, professional timeline, portfolio quality, and live GitHub behavioral signals — then combines them into a single explainable composite score.
+ClearHire is a full-stack AI candidate ranking platform built with **FastAPI** on the backend and **Vanilla HTML/CSS/JavaScript** on the frontend. It evaluates every resume through five independent scoring layers — semantic meaning, skill taxonomy, professional timeline, portfolio quality, and live GitHub behavioral signals — then combines them into a single explainable composite score.
 
 The system accepts a Job Description and a list of candidates (manual entry or PDF upload), runs all evaluations **concurrently** using `asyncio.gather`, sorts the results, flags potential hiring biases, and optionally generates **Gemini 2.5 Flash** LLM verdicts and personalised interview questions.
 
 ---
 ## Demo Video
 
-Watch RecruitIQ in action:
+Watch ClearHire in action:
 
 https://drive.google.com/file/d/1WrqZf_KMLUrzyxOz8Dnfuc6sVKDTg5p4/view?usp=sharing
 
@@ -54,11 +54,11 @@ Some glimpse of the project can be seen on:
 https://drive.google.com/drive/folders/19GklnKBKFmoealGCpI1yYjRbEdua2TKQ?usp=sharing
 
 
-## Why RecruitIQ
+## Why ClearHire
 
 Traditional ATS systems fail in predictable ways:
 
-| Problem | How RecruitIQ Solves It |
+| Problem | How ClearHire Solves It |
 |---|---|
 | "AWS" vs "Amazon Web Services" treated as different skills | 140+ alias taxonomy map + `difflib` fuzzy matching resolves both to the same canonical skill |
 | Years of experience is self-reported and easy to fake | spaCy NER extracts actual date ranges from resume text and computes real months worked |
@@ -234,7 +234,7 @@ Traditional ATS systems fail in predictable ways:
 ## Project Structure
 
 ```
-resume_checker-main/
+ClearHire/
 │
 ├── main.py                        # FastAPI app — all endpoints, concurrent evaluation
 │
@@ -298,8 +298,8 @@ resume_checker-main/
 ### Step 1 — Clone the repository
 
 ```bash
-git clone https://github.com/Yasxh01/resume_checker.git
-cd resume_checker
+git clone https://github.com/Yasxh01/ClearHire.git
+cd ClearHire
 ```
 
 ### Step 2 — Create and activate a virtual environment
