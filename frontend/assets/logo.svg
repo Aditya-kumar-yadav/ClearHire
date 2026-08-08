@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <g stroke="#0ea5e9" stroke-width="12" stroke-linecap="round">
+    <line x1="250" y1="180" x2="320" y2="180" />
+    <line x1="220" y1="220" x2="290" y2="220" />
+    <line x1="260" y1="260" x2="310" y2="260" />
+  </g>
+  <line x1="250" y1="380" x2="550" y2="380" stroke="#9333ea" stroke-width="8" stroke-linecap="round" />
+  <g stroke="#9333ea" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <polyline points="440,160 410,260 490,270 500,340" />
+    <line x1="410" y1="260" x2="360" y2="350" />
+    <polyline points="430,180 490,210 520,160" />
+    <line x1="430" y1="180" x2="370" y2="230" />
+  </g>
+  <circle cx="460" cy="115" r="30" fill="#9333ea" />
+  <g transform="translate(300, 210)">
+    <rect x="0" y="10" width="60" height="45" rx="5" fill="#0ea5e9" />
+    <path d="M 20 10 L 20 0 L 40 0 L 40 10" fill="none" stroke="#0ea5e9" stroke-width="6" stroke-linecap="round" />
+  </g>
+  <text x="400" y="470" font-family="Arial, sans-serif" font-weight="900" font-size="65" font-style="italic" letter-spacing="4" fill="#9333ea" text-anchor="middle">CLEARHIRE</text>
+  <text x="400" y="530" font-family="Arial, sans-serif" font-weight="bold" font-size="32" font-style="italic" letter-spacing="8" fill="#0ea5e9" text-anchor="middle">MADE CLEAR</text>
+</svg>
