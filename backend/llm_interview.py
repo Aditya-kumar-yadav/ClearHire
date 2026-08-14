@@ -86,7 +86,7 @@ Return valid JSON matching this exact structure:
 Do NOT wrap the JSON in markdown code blocks. Just output raw JSON.
 """
             response = await client.aio.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             response_text = response.text.strip()
