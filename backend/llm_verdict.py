@@ -126,7 +126,7 @@ async def generate_verdict(
 
     
             response = await client.aio.models.generate_content(
-              model="gemini-2.0-flash",
+              model="gemini-3.5-flash",
               contents=prompt
             )
 

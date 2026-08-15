@@ -85,17 +85,24 @@ Return valid JSON matching this exact structure:
 }}
 Do NOT wrap the JSON in markdown code blocks. Just output raw JSON.
 """
+            from google.genai import types
             response = await client.aio.models.generate_content(
-                model='gemini-2.0-flash',
-                contents=prompt
+                model='gemini-3.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
             )
             response_text = response.text.strip()
             
-            # Clean up markdown if the LLM adds it anyway
+            # Clean up markdown if the LLM adds it anyway (fallback)
             if response_text.startswith("```json"):
                 response_text = response_text[7:]
+            if response_text.startswith("```"):
+                response_text = response_text[3:]
             if response_text.endswith("```"):
                 response_text = response_text[:-3]
+            response_text = response_text.strip()
 
             data = json.loads(response_text)
             logger.info(f"LLM Interview: Generated for {candidate_name}")
